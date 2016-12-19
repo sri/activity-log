@@ -153,3 +153,5 @@
       (recenter 0)
       (when (search-forward day-heading nil t)
         (end-of-line)))))
+
+(provide 'activity-log)

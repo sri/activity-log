@@ -1,5 +1,6 @@
 (require 'ert)
 (require 'subr-x) ;for string-join
+(require 'activity-log)
 
 (ert-deftest activity-log-starting-dow-test ()
   (let ((activity-log-week-starts-on 'wednesday))
