@@ -1,14 +1,14 @@
-## activity-log.el
+# activity-log.el
 
 **Currently tested under GNU Emacs 25.1.1 on OS X.**
 
 I use this to keep track of what I've done, issues that I have solved, and everything else while at work. Originally, this was a part of my `~/.emacs` but it seemed ripe for extraction into its own library.
 
-### So what does it do?
+## So what does it do?
 1. It inserts a template for the upcoming week so that I don't have to do it manually.
 2. And when Emacs starts up, I open the log file and place the cursor on today's header.
 
-Here is a screenshot:
+## Screenshot
 
 ![alt text](https://github.com/sri/activity-log/raw/master/activity-log-1.png "Activity Log Screenshot")
 
