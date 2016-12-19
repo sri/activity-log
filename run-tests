@@ -1,0 +1,5 @@
+#!/bin/sh
+EMACS=/usr/local/bin/emacs
+$EMACS -Q -batch -L . \
+  -l activity-log-test.el \
+  -f ert-run-tests-batch-and-exit
