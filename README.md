@@ -1,8 +1,14 @@
 ## activity-log.el
 
-**activity-log.el is currently tested under GNU Emacs 25.1.1 on OS X.**
+**Currently tested under GNU Emacs 25.1.1 on OS X.**
 
-## Screenshot
+I use this to keep track of what I've done, issues that I have solved, and everything else while at work. Originally, this was a part of my `~/.emacs` but it seemed ripe for extraction into its own library.
+
+So what does it do?
+1. It inserts a template for the upcoming week so that I don't have to do it manually.
+2. And when Emacs starts up, I open the log file and place the cursor on today's header.
+
+Here is a screenshot:
 
 ![alt text](https://github.com/sri/activity-log/raw/master/activity-log-1.png "Activity Log Screenshot")
 
@@ -22,8 +28,8 @@ Invoke `activity-log-goto-today` like so to open and place the cursor on the cur
 
 ### User customizable variables
 
-* `activity-log-week-starts-on` defaults to the symbol `monday`. Select one of: `sunday`, `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, or `saturday`.
-* `activity-log-exclude-days` defaults to `'(saturday sunday)`. Add days which shouldn't show up when inserting the week's template into the current buffer.
+* `activity-log-week-starts-on` defaults to the `'monday`. It must be one of: `sunday`, `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, or `saturday`.
+* `activity-log-exclude-days` defaults to `'(saturday sunday)`. Days added to this list won't be output when you invoke `activity-log-insert`.
 * `activity-log-day-header` defaults to `"<%Y-%m-%d %a - day %j>"`. This is how the day will show up. See screenshot. **Note: this or the week header should be surrounded by `<` and `>` for date detection to work.**
 * `activity-log-week-header` defaults to `"%Y-%m-%d (week %U)"`. This is how the week header will be formatted. See screenshot.
 * `activity-log-week-header-level` defaults to `"**"`. This and a space is added before inserting the week. Day header will also add an extra `*`.
@@ -33,4 +39,3 @@ Invoke `activity-log-goto-today` like so to open and place the cursor on the cur
 
 * Move user customization from `defvar` to `defcustom`.
 * Better date detection in `activity-log-latest-in-current-buffer`. Currently, any org header (a line that starts with '*') with a timestamp (starts with `<` and ends with `>`) is considered a valid date.
-*
