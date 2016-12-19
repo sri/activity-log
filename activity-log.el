@@ -1,11 +1,16 @@
-;;; activity-log.el --- an activity log for org mode
+;;; activity-log.el --- Provides an activity log for org mode
 
 ;; Copyright (C) 2016 by Sriram Thaiyar
 
 ;; Author: Sriram Thaiyar <sriram.thaiyar@gmail.com>
-;; URL: https://github.com/sri/activity-log
-;; Package-Version:
 ;; Version: 0.1
+;; Keywords: convenience
+;; Homepage: https://github.com/sri/activity-log
+;; Package-Requires: ((org "8.2") (emacs "25"))
+
+;; This file is not part of GNU Emacs.
+
+
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -23,6 +28,8 @@
 ;;; Commentary:
 
 ;; See README.md for details.
+
+;;; Code:
 
 (require 'org)
 (require 'time-date)
@@ -155,3 +162,5 @@
         (end-of-line)))))
 
 (provide 'activity-log)
+
+;;; activity-log.el ends here
