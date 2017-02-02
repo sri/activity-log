@@ -10,8 +10,6 @@
 
 ;; This file is not part of GNU Emacs.
 
-
-
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
@@ -27,7 +25,36 @@
 
 ;;; Commentary:
 
-;; See README.md for details.
+;; Here is an example of an activity log template:
+;;
+;; ** 2016-12-12 (week 50)
+;; *** <2016-12-12 Mon - day 347>
+;; **** Stuff I did on Monday
+;; *** <2016-12-13 Tue - day 348>
+;; **** Stuff I did on Tuesday
+;; *** <2016-12-14 Wed - day 349>
+;; *** <2016-12-16 Fri - day 351>
+;; *** <2016-12-17 Sat - day 352>
+;; *** <2016-12-18 Sun - day 353>
+;;
+;; This library provides a couple of helper function to generate such
+;; a log:
+;;
+;; 1) `activity-log-insert' -- insert a template like the above into
+;; the current buffer. If such a template already exists in the
+;; current buffer then it'll insert the template for the week
+;; following the latest template.
+;;
+;; 2) `activity-log-goto-today' -- place cursor on header for today.
+;; Something like this is useful to add to your `~/.emacs':
+;;
+;;   (activity-log-goto-today
+;;     ;; find-file opens the file in a new buffer
+;;     ;; (if one doesn't exist) and switches current
+;;     ;; window to that buffer.
+;;     (find-file "~/Desktop/notes.org"))
+;;
+;; That's it!
 
 ;;; Code:
 
