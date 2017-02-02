@@ -1,6 +1,6 @@
 ;;; activity-log.el --- Provides an activity log for org mode
 
-;; Copyright (C) 2016 by Sriram Thaiyar
+;; Copyright (C) 2017 by Sriram Thaiyar
 
 ;; Author: Sriram Thaiyar <sriram.thaiyar@gmail.com>
 ;; Version: 0.1
