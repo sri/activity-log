@@ -64,11 +64,32 @@
 ;;
 ;; User Customization:
 
-(defvar activity-log-week-starts-on 'monday)
-(defvar activity-log-exclude-days '(saturday sunday))
-(defvar activity-log-day-header "<%Y-%m-%d %a - day %j>")
-(defvar activity-log-week-header "%Y-%m-%d (week %U)")
-(defvar activity-log-week-header-level "**")
+(defgroup activity-log nil
+  "Tools to help with an activity log."
+  :link '(url-link "https://github.com/sri/activity-log")
+  :group 'convenience)
+
+(defcustom activity-log-week-starts-on 'monday
+  "Day of week when the week starts."
+  :type 'symbol
+  :group 'activity-log)
+
+(defcustom activity-log-exclude-days '(saturday sunday)
+  "Days to exclude from the template."
+  :type '()
+  :group 'activity-log)
+
+(defcustom activity-log-day-header "<%Y-%m-%d %a - day %j>"
+  "Format of the day header."
+  :group 'activity-log)
+
+(defcustom activity-log-week-header "%Y-%m-%d (week %U)"
+  ""
+  :group 'activity-log)
+
+(defcustom activity-log-week-header-level "**"
+  ""
+  :group 'activity-log)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
