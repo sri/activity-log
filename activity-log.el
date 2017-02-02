@@ -172,8 +172,6 @@
                   (format-time-string activity-log-day-header day)
                   "\n"))))))
 
-;; Date dete
-
 (defun activity-log-latest-in-current-buffer ()
   (save-excursion
     (goto-char (point-max))
