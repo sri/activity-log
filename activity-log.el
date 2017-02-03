@@ -3,7 +3,7 @@
 ;; Copyright (C) 2017 by Sriram Thaiyar
 
 ;; Author: Sriram Thaiyar <sriram.thaiyar@gmail.com>
-;; Version: 0.1
+;; Version: 0.2
 ;; Keywords: convenience
 ;; Homepage: https://github.com/sri/activity-log
 ;; Package-Requires: ((org "8.2") (emacs "25"))
@@ -40,21 +40,25 @@
 ;; This library provides a couple of helper function to generate such
 ;; a log:
 ;;
-;; 1) `activity-log-insert' -- insert a template like the above into
-;; the current buffer. If such a template already exists in the
-;; current buffer then it'll insert the template for the week
-;; following the latest template.
+;; 1) `activity-log-insert' inserts a template like the above into the
+;;    current buffer. If such a template already exists in the current
+;;    buffer, then it'll insert the template for the week after that.
 ;;
-;; 2) `activity-log-goto-today' -- place cursor on header for today.
-;; Something like this is useful to add to your `~/.emacs':
+;; 2) `activity-log-goto-today' puts the cursor on header for today.
+;;    So something like this is useful to add to your `~/.emacs':
 ;;
-;;   (activity-log-goto-today
-;;     ;; find-file opens the file in a new buffer
-;;     ;; (if one doesn't exist) and switches current
-;;     ;; window to that buffer.
-;;     (find-file "~/Desktop/notes.org"))
+;;      (activity-log-goto-today (find-file "~/Desktop/notes.org"))
 ;;
-;; That's it!
+;; 3) If you use a ticketing system (like JIRA), then you can use
+;;    dynamic links -- text that automatically turn into links. If you
+;;    have a ticket called `JS-223' and you provide your company's
+;;    JIRA URL like so:
+;;
+;;      (setq activity-log-ticket-url "https://my-company.example.com/%s")
+;;
+;;    Then clicking on `JS-223' will take you to
+;;    `https://my-company.example.com/JS-233'. See also
+;;    `activity-log-dynamic-links-matcher'.
 
 ;;; Code:
 
@@ -68,6 +72,46 @@
   "Tools to help with an activity log."
   :link '(url-link "https://github.com/sri/activity-log")
   :group 'convenience)
+
+;; Ticket matching
+
+(defface activity-log-dynamic-link-face
+  '((t :foreground "#268bd2" :box 1 :weight bold :inherit unspecified))
+  "Face for Activity Log dynamic links.")
+
+;; See `org-activate-plain-links' and `org-set-font-lock-defaults'
+;; for an example of how this is done in Org mode.
+;; Another way to achieve this is with `goto-address-mode'.
+
+(defcustom activity-log-ticket-url nil
+  "This should contain the URL to take the user when
+a ticket regex is clicked on.
+See `activity-log-dynamic-links-matcher'."
+  :group 'activity-log)
+
+(defcustom activity-log-dynamic-links-matcher
+  '(("\\([[:alpha:]]\\{2,5\\}[[:digit:]]?-[[:digit:]]+\\)" activity-log-ticket-url))
+
+  "Matcher for dynamic links.
+Each element must be a 2-element list of the format:
+
+  (REGEX URL)
+
+REGEX should match whichever word you want to convert to a link.
+URL should be the URL to open when the link is clicked. If it
+contains a \"%s\", then it will be replaced with the matched
+word. If that isn't present, then the URL is visited. If it is a
+symbol, then the symbol's value is used as the URL.
+
+Dynamic link can only be clicked on by the mouse. Hitting <Enter>
+on them does nothing.
+
+The default regexp here will match a 'ticket' such as:
+
+  JIRA-122
+  CH-39399
+  TN-292"
+  :group 'activity-log)
 
 (defcustom activity-log-week-starts-on 'monday
   "Day of week when the week starts."
@@ -97,6 +141,48 @@
 ;; Internals:
 ;;
 
+;; Dynamic links:
+(defun activity-log-activate-dynamic-links (limit)
+  (let ((matchers activity-log-dynamic-links-matcher)
+        (result nil)
+        (regex)
+        (link-template))
+    (while (and matchers
+                (null result))
+
+      (setq regex (caar matchers)
+            link-template (cadar matchers)
+            matchers (cdr matchers))
+
+      (when (symbolp link-template)
+        (setq link-template (symbol-value link-template)))
+
+      ;; Below is mostly copied from `org-activate-plain-links'.
+      (when (and (re-search-forward regex limit t)
+                 (not (org-in-src-block-p)))
+        (let ((face
+               (get-text-property (max (1- (match-beginning 0)) (point-min))
+                                  'face))
+              (link
+               (if (save-match-data (string-match "%s" link-template))
+                   (format link-template (org-match-string-no-properties 0))
+                 link-template)))
+          (unless (if (consp face) (memq 'org-tag face) (eq 'org-tag face))
+            (org-remove-flyspell-overlays-in (match-beginning 0) (match-end 0))
+            (add-text-properties (match-beginning 0) (match-end 0)
+                                 (list 'mouse-face 'highlight
+                                       'face 'activity-log-dynamic-link-face
+                                       'htmlize-link `(:uri ,link)
+                                       'keymap org-mouse-map))
+            (org-rear-nonsticky-at (match-end 0))
+            (setq result t)))))
+    result))
+
+;; Puts our function into the `font-lock-defaults'.
+(add-hook 'org-font-lock-set-keywords-hook
+          (lambda ()
+            (nconc org-font-lock-extra-keywords
+                   (list '(activity-log-activate-dynamic-links (0 'org-link t))))))
 ;;
 ;; Date-Time handling
 
