@@ -128,12 +128,17 @@ The default regexp here will match a 'ticket' such as:
   :group 'activity-log)
 
 (defcustom activity-log-week-header "%Y-%m-%d (week %U)"
-  ""
+  "Format of the week header."
   :group 'activity-log)
 
 (defcustom activity-log-week-header-level "**"
-  ""
+  "Org header level when inserting a week."
   :group 'activity-log)
+
+(defcustom activity-log-top-header "ACTIVITY LOG"
+  "Name of the top level header that contains all the activity logs."
+  :group 'activity-log)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -282,15 +287,19 @@ The default regexp here will match a 'ticket' such as:
   (let* ((now (current-time))
          (week-heading (format-time-string activity-log-week-header
                                            (activity-log-week-start now)))
-        (day-heading (format-time-string activity-log-day-header
-                                         now)))
+         (day-heading (format-time-string activity-log-day-header
+                                          now)))
     (goto-char (point-min))
+    (when (and activity-log-top-header
+               (search-forward activity-log-top-header nil t))
+      (outline-show-children))
     (when (search-forward week-heading nil t)
-      (outline-show-branches)
+      (outline-show-children)
       (unless (called-interactively-p 'interactive)
 	(sit-for 0.3))
       (recenter 0)
       (when (search-forward day-heading nil t)
+        (outline-show-children)
         (end-of-line)))))
 
 (provide 'activity-log)
