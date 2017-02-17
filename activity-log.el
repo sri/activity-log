@@ -3,7 +3,7 @@
 ;; Copyright (C) 2017 by Sriram Thaiyar
 
 ;; Author: Sriram Thaiyar <sriram.thaiyar@gmail.com>
-;; Version: 0.2
+;; Version: 0.3
 ;; Keywords: convenience
 ;; Homepage: https://github.com/sri/activity-log
 ;; Package-Requires: ((org "8.2") (emacs "25"))
@@ -177,11 +177,19 @@ The default regexp here will match a 'ticket' such as:
             (add-text-properties (match-beginning 0) (match-end 0)
                                  (list 'mouse-face 'highlight
                                        'face 'activity-log-dynamic-link-face
-                                       'htmlize-link `(:uri ,link)
+                                       'activity-log-link `(:uri ,link)
                                        'keymap org-mouse-map))
             (org-rear-nonsticky-at (match-end 0))
             (setq result t)))))
     result))
+
+
+(add-hook 'org-open-at-point-functions
+          (lambda ()
+            (let ((link (get-text-property (point) 'activity-log-link)))
+              (when (cadr link)
+                (browse-url (cadr link))
+                t))))
 
 ;; Puts our function into the `font-lock-defaults'.
 (add-hook 'org-font-lock-set-keywords-hook
