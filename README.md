@@ -31,9 +31,25 @@ Invoke `activity-log-goto-today` like so to open and place the cursor on the cur
 * `activity-log-week-starts-on` defaults to the `'monday`. It must be one of: `sunday`, `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, or `saturday`.
 * `activity-log-exclude-days` defaults to `'(saturday sunday)`. Days added to this list won't be output when you invoke `activity-log-insert`.
 * `activity-log-day-header` defaults to `"<%Y-%m-%d %a - day %j>"`. This is how the day will show up. See screenshot. **Note: this or the week header should be surrounded by `<` and `>` for date detection to work.**
-* `activity-log-week-header` defaults to `"%Y-%m-%d (week %U)"`. This is how the week header will be formatted. See screenshot.
+* `activity-log-week-header` defaults to `"%Y-%m-%d (week %U)"`. This is how the week header will be formatted. See screenshot. This can be set to `nil` in which case the week header is not rendered.
 * `activity-log-week-header-level` defaults to `"**"`. This and a space is added before inserting the week. Day header will also add an extra `*`.
 
+Here is a way to have days listed in your activity log with only daily headers:
+
+```
+(setq activity-log-week-header-level "")
+(setq activity-log-week-header nil)
+(setq activity-log-day-header "<%Y-%m-%d %a>")
+```
+
+gives you toplevel days
+
+```
+* <2019-01-22 Tue>
+* <2019-01-23 Wed>
+* <2019-01-24 Thu>
+* <2019-01-25 Fri>
+```
 
 ## TODOs
 
