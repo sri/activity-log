@@ -259,10 +259,11 @@ The default regexp here will match a 'ticket' such as:
         (exclude (mapcar (lambda (day)
                            (cdr (assq day activity-log-dow-alist)))
                          activity-log-exclude-days)))
-    (insert activity-log-week-header-level
-            " "
-            (format-time-string activity-log-week-header (car week))
-            "\n")
+    (when activity-log-week-header
+      (insert activity-log-week-header-level
+              " "
+              (format-time-string activity-log-week-header (car week))
+              "\n"))
     (dolist (day week)
       (let ((dow (nth 6 (decode-time day))))
         (unless (memq dow exclude)
